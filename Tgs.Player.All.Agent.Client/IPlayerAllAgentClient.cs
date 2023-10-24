@@ -5,7 +5,7 @@ public interface IPlayerAllAgentClient
     Task CreateDailyPlayerAllAgentRebatesAsync();
     Task CreateWeeklyPlayerAllAgentRebatesAsync();
     Task CreateMonthlyPlayerAllAgentRebatesAsync();
-    Task ManualCreateDailyPlayerAllAgentRebatesAsync(string date);
-    Task ManualCreateWeeklyPlayerAllAgentRebatesAsync(string date);
-    Task DistributeRebatesAsync(string fromDate, string toDate);
+    Task ManualCreateDailyPlayerAllAgentRebatesAsync(DateOnly date);
+    Task ManualCreateWeeklyPlayerAllAgentRebatesAsync(DateOnly date);
+    Task DistributeRebatesAsync(DateOnly fromDate, DateOnly toDate);
 }

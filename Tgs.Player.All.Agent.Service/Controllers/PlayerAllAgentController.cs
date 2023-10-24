@@ -83,12 +83,11 @@ public class PlayerAllAgentController : ControllerBase
             monthTo.UtcDateTime));
     }
 
-    [HttpPost("manual-daily-player-all-agent/{date}")]
+    [HttpPost("manual-daily-player-all-agent")]
     [Description("Manual create daily player all agent rebates")]
-    public Task ManualCreateDailyPlayerAllAgentRebatesAsync(string date)
+    public Task ManualCreateDailyPlayerAllAgentRebatesAsync([FromQuery] DateOnly date)
     {
-        if (date.IsNullOrEmpty() ||
-            !DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
+        if (!DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
             return Task.CompletedTask;
 
         var rebateDate = new DateTimeOffset(result.Year,
@@ -104,12 +103,11 @@ public class PlayerAllAgentController : ControllerBase
             rebateDate.UtcDateTime));
     }
 
-    [HttpPost("manual-weekly-player-all-agent/{date}")]
+    [HttpPost("manual-weekly-player-all-agent")]
     [Description("Manual create weekly player all agent rebates")]
-    public Task ManualCreateWeeklyPlayerAllAgentRebatesAsync(string date)
+    public Task ManualCreateWeeklyPlayerAllAgentRebatesAsync([FromQuery] DateOnly date)
     {
-        if (date.IsNullOrEmpty() ||
-            !DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
+        if (!DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
             return Task.CompletedTask;
 
         var rebateDate = new DateTimeOffset(result.Year,
@@ -132,14 +130,12 @@ public class PlayerAllAgentController : ControllerBase
             weekTo.UtcDateTime));
     }
 
-    [HttpPost("distribute-rebates/{from}/{to}")]
+    [HttpPost("distribute-rebates")]
     [Description("Distribute rebates")]
-    public Task DistributeRebatesAsync(string from, string to)
+    public Task DistributeRebatesAsync([FromQuery] DateOnly fromDate, [FromQuery] DateOnly toDate)
     {
-        if (string.IsNullOrEmpty(from) ||
-            string.IsNullOrEmpty(to) ||
-            !DateTimeOffset.TryParse($"{from} 00:00 +08:00", out var resultFrom) ||
-            !DateTimeOffset.TryParse($"{to} 00:00 +08:00", out var resultTo))
+        if (!DateTimeOffset.TryParse($"{fromDate} 00:00 +08:00", out var resultFrom) ||
+            !DateTimeOffset.TryParse($"{toDate} 00:00 +08:00", out var resultTo))
             return Task.CompletedTask;
 
         var rebateFromDate = new DateTimeOffset(resultFrom.Year,

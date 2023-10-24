@@ -75,6 +75,8 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
             await _playerAllAgentRepository.SetDistributedAsync(childPlayer.Id, cancellationToken);
 
             await _mediator.Publish(new DistributeRebateEvent(childPlayer), cancellationToken);
+
+            await Task.Delay(200, cancellationToken);
         }
     }
 

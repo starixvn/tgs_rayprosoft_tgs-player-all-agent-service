@@ -33,25 +33,25 @@ public class PlayerAllAgentClient : IPlayerAllAgentClient
         _ = response.EnsureSuccessStatusCode();
     }
 
-    public async Task ManualCreateDailyPlayerAllAgentRebatesAsync(string date)
+    public async Task ManualCreateDailyPlayerAllAgentRebatesAsync(DateOnly date)
     {
-        var response = await _client.PostAsync($"/api/playerAllAgent/manual-daily-player-all-agent/{date}", null)
+        var response = await _client.PostAsync($"/api/playerAllAgent/manual-daily-player-all-agent?date={date}", null)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();
     }
 
-    public async Task ManualCreateWeeklyPlayerAllAgentRebatesAsync(string date)
+    public async Task ManualCreateWeeklyPlayerAllAgentRebatesAsync(DateOnly date)
     {
-        var response = await _client.PostAsync($"/api/playerAllAgent/manual-weekly-player-all-agent/{date}", null)
+        var response = await _client.PostAsync($"/api/playerAllAgent/manual-weekly-player-all-agent?date={date}", null)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();
     }
 
-    public async Task DistributeRebatesAsync(string fromDate, string toDate)
+    public async Task DistributeRebatesAsync(DateOnly fromDate, DateOnly toDate)
     {
-        var response = await _client.PostAsync($"/api/playerAllAgent/distribute-rebates/{fromDate}/{toDate}", null)
+        var response = await _client.PostAsync($"/api/playerAllAgent/distribute-rebates?fromDate={fromDate}&toDate={toDate}", null)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();

@@ -155,7 +155,7 @@ public class PlayerAllAgentTests
         {
             var sut = new PlayerAllAgentClient(httpClient);
 
-            await sut.ManualCreateDailyPlayerAllAgentRebatesAsync("2023-01-01");
+            await sut.ManualCreateDailyPlayerAllAgentRebatesAsync(DateOnly.Parse("2023-01-01"));
 
             await fakeMediator.Received(1).Send(Arg.Any<CreatePlayerAllAgentDistributionRequest>());
         }
@@ -192,7 +192,7 @@ public class PlayerAllAgentTests
         {
             var sut = new PlayerAllAgentClient(httpClient);
 
-            await sut.ManualCreateWeeklyPlayerAllAgentRebatesAsync("2023-01-01");
+            await sut.ManualCreateWeeklyPlayerAllAgentRebatesAsync(DateOnly.Parse("2023-01-01"));
 
             await fakeMediator.Received(1).Send(Arg.Any<CreatePlayerAllAgentDistributionRequest>());
         }
@@ -229,12 +229,14 @@ public class PlayerAllAgentTests
         {
             var sut = new PlayerAllAgentClient(httpClient);
 
-            await sut.DistributeRebatesAsync("2023-01-01", "2023-01-01");
+            var from = DateTimeOffset.Parse("2023-10-16 00:00+8");
+            var to = DateTimeOffset.Parse("2023-10-23 00:00+8");
+            await sut.DistributeRebatesAsync(DateOnly.Parse("2023-10-16"), DateOnly.Parse("2023-10-23"));
 
-            await fakeMediator.Received(1).Send(Arg.Any<PlayerAllAgentManualDistributionRequest>());
+            await fakeMediator.Received(1)
+                .Send(Arg.Is(new PlayerAllAgentManualDistributionRequest(from.UtcDateTime, to.UtcDateTime)));
         }
     }
-
 
     private Fixture CreateConditionFixture(Guid brandId)
     {
