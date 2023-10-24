@@ -119,7 +119,7 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
         DateTime to)
     {
         return _tgsContext.PlayerAllAgentRebateContributors
-            .Where(x => x.From == from && x.To == to  && x.SentOn == null)
+            .Where(x => x.From == from && x.To == to && x.SentOn == null)
             .Select(x => new PlayerAllAgentRebateContributorModel
             {
                 Id = x.Id,

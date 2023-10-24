@@ -289,8 +289,13 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
             GameType.VirtualSports => AllAgentGameType.VirtualSports,
             GameType.LiveDealer or GameType.LiveDealerLobby => AllAgentGameType.LiveDealer,
             GameType.CardGame or GameType.CardGameLobby => AllAgentGameType.CardGame,
-            GameType.Fishing or GameType.FishingLobby or GameType.Arcade or GameType.ArcadeLobby or GameType.Slot or GameType.TableGame => AllAgentGameType
-                .Slot,
+            GameType.Fishing
+                or GameType.FishingLobby
+                or GameType.Arcade
+                or GameType.ArcadeLobby
+                or GameType.Slot
+                or GameType.TableGame => AllAgentGameType
+                    .Slot,
             GameType.Lottery or GameType.LotteryLobby => AllAgentGameType.Lottery,
             _ => throw new ArgumentOutOfRangeException()
         };

@@ -13,7 +13,7 @@ internal class CreatePlayerBucketEventHandler : INotificationHandler<CreatePlaye
 
     public CreatePlayerBucketEventHandler(
         IPlayerBucketClient playerBucketClient,
-    ILogger<CreatePlayerBucketEventHandler> logger)
+        ILogger<CreatePlayerBucketEventHandler> logger)
     {
         _logger = logger;
         _playerBucketClient = playerBucketClient;

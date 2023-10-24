@@ -11,9 +11,9 @@ namespace Tgs.Player.All.Agent.Core.Events;
 internal class DistributeRebateEventHandler : INotificationHandler<DistributeRebateEvent>
 {
     private readonly ICashServiceClient _cashServiceClient;
+    private readonly ILogger<CreatePlayerBucketEventHandler> _logger;
     private readonly IPlayerAllAgentRepository _playerRepository;
     private readonly IPlayerServiceClient _playerServiceClient;
-    private readonly ILogger<CreatePlayerBucketEventHandler> _logger;
 
     public DistributeRebateEventHandler(
         ICashServiceClient cashServiceClient,

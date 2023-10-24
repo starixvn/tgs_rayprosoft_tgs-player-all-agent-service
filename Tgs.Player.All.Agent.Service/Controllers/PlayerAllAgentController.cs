@@ -32,7 +32,9 @@ public class PlayerAllAgentController : ControllerBase
             0,
             previousDay.Offset);
 
-        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Daily, reportDate.UtcDateTime, reportDate.UtcDateTime));
+        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Daily,
+            reportDate.UtcDateTime,
+            reportDate.UtcDateTime));
     }
 
     [HttpPost("weekly-player-all-agent")]
@@ -53,7 +55,9 @@ public class PlayerAllAgentController : ControllerBase
 
         var weekTo = reportDate.AddDays(-7).GetSunday();
 
-        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Weekly, weekFrom.UtcDateTime, weekTo.UtcDateTime));
+        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Weekly,
+            weekFrom.UtcDateTime,
+            weekTo.UtcDateTime));
     }
 
     [HttpPost("monthly-player-all-agent")]
@@ -74,7 +78,9 @@ public class PlayerAllAgentController : ControllerBase
 
         var monthTo = reportDate.AddMonths(-1).GetLastDayOfMonth();
 
-        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Monthly, monthFrom.UtcDateTime, monthTo.UtcDateTime));
+        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Monthly,
+            monthFrom.UtcDateTime,
+            monthTo.UtcDateTime));
     }
 
     [HttpPost("manual-daily-player-all-agent/{date}")]
@@ -84,11 +90,18 @@ public class PlayerAllAgentController : ControllerBase
         if (date.IsNullOrEmpty() ||
             !DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
             return Task.CompletedTask;
-        
-        var rebateDate = new DateTimeOffset(result.Year, result.Month, result.Day, 0, 0, 0,
+
+        var rebateDate = new DateTimeOffset(result.Year,
+            result.Month,
+            result.Day,
+            0,
+            0,
+            0,
             result.Offset);
 
-        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Daily, rebateDate.UtcDateTime, rebateDate.UtcDateTime));
+        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Daily,
+            rebateDate.UtcDateTime,
+            rebateDate.UtcDateTime));
     }
 
     [HttpPost("manual-weekly-player-all-agent/{date}")]
@@ -99,7 +112,12 @@ public class PlayerAllAgentController : ControllerBase
             !DateTimeOffset.TryParse($"{date} 00:00 +08:00", out var result))
             return Task.CompletedTask;
 
-        var rebateDate = new DateTimeOffset(result.Year, result.Month, result.Day, 0, 0, 0,
+        var rebateDate = new DateTimeOffset(result.Year,
+            result.Month,
+            result.Day,
+            0,
+            0,
+            0,
             result.Offset);
 
         var weekFrom = rebateDate.GetMonday();
@@ -109,7 +127,9 @@ public class PlayerAllAgentController : ControllerBase
 
         if (today <= weekTo) return Task.CompletedTask;
 
-        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Weekly, weekFrom.UtcDateTime, weekTo.UtcDateTime));
+        return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Weekly,
+            weekFrom.UtcDateTime,
+            weekTo.UtcDateTime));
     }
 
     [HttpPost("distribute-rebates/{from}/{to}")]
@@ -119,7 +139,7 @@ public class PlayerAllAgentController : ControllerBase
         if (string.IsNullOrEmpty(from) ||
             string.IsNullOrEmpty(to) ||
             !DateTimeOffset.TryParse($"{from} 00:00 +08:00", out var resultFrom) ||
-            !DateTimeOffset.TryParse($"{to} 00:00 +08:00", out var resultTo)) 
+            !DateTimeOffset.TryParse($"{to} 00:00 +08:00", out var resultTo))
             return Task.CompletedTask;
 
         var rebateFromDate = new DateTimeOffset(resultFrom.Year,

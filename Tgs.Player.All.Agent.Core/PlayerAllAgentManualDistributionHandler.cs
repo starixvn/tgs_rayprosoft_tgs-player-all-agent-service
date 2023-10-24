@@ -8,9 +8,9 @@ namespace Tgs.Player.All.Agent.Core;
 
 internal class PlayerAllAgentManualDistributionHandler : IRequestHandler<PlayerAllAgentManualDistributionRequest>
 {
-    private readonly IPlayerAllAgentRepository _playerAllAgentRepository;
-    private readonly IMediator _mediator;
     private readonly ILogger<PlayerAllAgentManualDistributionHandler> _logger;
+    private readonly IMediator _mediator;
+    private readonly IPlayerAllAgentRepository _playerAllAgentRepository;
 
     public PlayerAllAgentManualDistributionHandler(IPlayerAllAgentRepository playerAllAgentRepository,
         IMediator mediator,
@@ -26,7 +26,7 @@ internal class PlayerAllAgentManualDistributionHandler : IRequestHandler<PlayerA
         _logger.LogInformation("Player All Agent Manual Distribution From:{From} To:{To}",
             request.From,
             request.To);
-        
+
         var readToSendRebates =
             _playerAllAgentRepository.GetNotSentRebatesAsync(request.From, request.To);
 

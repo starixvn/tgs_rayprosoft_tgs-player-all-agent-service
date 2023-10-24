@@ -8,7 +8,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddPlayerAllAgentClient(
         this IServiceCollection services,
         Action<PlayerAllAgentOptions, IServiceProvider> configure)
-        => services
+    {
+        return services
             .AddOptions<PlayerAllAgentOptions>()
             .Configure(configure)
             .Services
@@ -17,5 +18,7 @@ public static class ServiceCollectionExtensions
                 var options = sp.GetRequiredService<IOptions<PlayerAllAgentOptions>>().Value;
 
                 c.BaseAddress = options.Url;
-            }).Services;
+            })
+            .Services;
+    }
 }

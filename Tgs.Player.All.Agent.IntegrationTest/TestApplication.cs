@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using Tgs.Player.All.Agent.Repository.Entities;
@@ -12,8 +12,6 @@ using Tgs.Player.All.Agent.Repository.Entities;
 namespace Tgs.Player.All.Agent.IntegrationTest;
 
 extern alias service;
-
-using Microsoft.AspNetCore.Mvc.Testing;
 
 internal class TestApplication : WebApplicationFactory<service::Program>
 {
@@ -38,7 +36,7 @@ internal class TestApplication : WebApplicationFactory<service::Program>
                     {
                         exporterOptions.TimeoutMilliseconds = 0;
                         exporterOptions.ExportProcessorType = ExportProcessorType.Batch;
-                        exporterOptions.Endpoint = new("http://otel.rpgp.cc:4317");
+                        exporterOptions.Endpoint = new Uri("http://otel.rpgp.cc:4317");
                     }))
             .AddFakeNatsMessageQueue()
             .Replace(ServiceDescriptor.Singleton(sp =>

@@ -8,9 +8,9 @@ namespace Tgs.Player.All.Agent.Core;
 
 internal class CreatePlayerAllAgentDistributionHandler : IRequestHandler<CreatePlayerAllAgentDistributionRequest>
 {
+    private readonly ILogger<CreatePlayerAllAgentDistributionHandler> _logger;
     private readonly IPlayerAllAgentRepository _playerAllAgentRepository;
     private readonly IPlayerAllAgentRebateTaskQueue _taskQueue;
-    private readonly ILogger<CreatePlayerAllAgentDistributionHandler> _logger;
 
     public CreatePlayerAllAgentDistributionHandler(IPlayerAllAgentRepository playerAllAgentRepository,
         IPlayerAllAgentRebateTaskQueue taskQueue,
@@ -27,7 +27,7 @@ internal class CreatePlayerAllAgentDistributionHandler : IRequestHandler<CreateP
             request.SettlementIntervalType,
             request.From,
             request.To);
-        
+
         var validPlayerCodes =
             _playerAllAgentRepository.GetValidPlayersAsync(request.From,
                 request.To,
