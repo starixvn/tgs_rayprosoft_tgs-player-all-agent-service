@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TGS.Core.Infrastructures.Extensions;
 using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Models;
 

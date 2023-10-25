@@ -20,7 +20,7 @@ public interface IPlayerAllAgentRepository
     Task CreatePlayerAllAgentRebateRecordsAsync(DateTime from,
         DateTime to,
         IEnumerable<PlayerAllAgentRebateModel> models,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken);
 
     Task CreatePlayerAllAgentRebateContributorsAsync(DateTime from,
         DateTime to,
