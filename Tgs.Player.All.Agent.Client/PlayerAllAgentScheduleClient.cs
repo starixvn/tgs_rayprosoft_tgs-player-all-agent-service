@@ -1,10 +1,10 @@
 ﻿namespace Tgs.Player.All.Agent.Client;
 
-public class PlayerAllAgentClient : IPlayerAllAgentClient
+internal class PlayerAllAgentScheduleClient : IPlayerAllAgentScheduleClient
 {
     private readonly HttpClient _client;
 
-    public PlayerAllAgentClient(HttpClient client)
+    public PlayerAllAgentScheduleClient(HttpClient client)
     {
         _client = client;
     }
@@ -51,7 +51,8 @@ public class PlayerAllAgentClient : IPlayerAllAgentClient
 
     public async Task DistributeRebatesAsync(DateOnly fromDate, DateOnly toDate)
     {
-        var response = await _client.PostAsync($"/api/playerAllAgent/distribute-rebates?fromDate={fromDate}&toDate={toDate}", null)
+        var response = await _client
+            .PostAsync($"/api/playerAllAgent/distribute-rebates?fromDate={fromDate}&toDate={toDate}", null)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();

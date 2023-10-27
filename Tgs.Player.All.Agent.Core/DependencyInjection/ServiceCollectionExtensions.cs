@@ -9,6 +9,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCore(this IServiceCollection services)
     {
         return services.AddMediatR(r => r.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
-            .AddTransient<IPlayerAllAgentRebateTaskQueueProcessor, PlayerAllAgentRebateTaskQueueProcessor>();
+            .AddTransient<IPlayerAllAgentRebateTaskQueueProcessor, PlayerAllAgentRebateTaskQueueProcessor>()
+            .AddTransient<IPlayerAllAgentRebateDistributionTaskQueueProcessor,
+                PlayerAllAgentRebateDistributionTaskQueueProcessor>();
     }
 }

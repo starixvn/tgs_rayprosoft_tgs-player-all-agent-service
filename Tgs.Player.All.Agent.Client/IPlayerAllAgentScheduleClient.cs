@@ -1,6 +1,6 @@
 ﻿namespace Tgs.Player.All.Agent.Client;
 
-public interface IPlayerAllAgentClient
+public interface IPlayerAllAgentScheduleClient
 {
     Task CreateDailyPlayerAllAgentRebatesAsync();
     Task CreateWeeklyPlayerAllAgentRebatesAsync();

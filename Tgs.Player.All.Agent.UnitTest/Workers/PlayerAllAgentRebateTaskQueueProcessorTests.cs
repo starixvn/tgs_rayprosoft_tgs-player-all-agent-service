@@ -1,8 +1,8 @@
 using AutoFixture;
-using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Tgs.Player.All.Agent.Core.Workers;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
@@ -14,12 +14,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task Get_Player_All_Agent_Turnover_Win_Loss()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -32,7 +30,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
             .Returns(turnoverWinLosses.ToAsyncEnumerable());
 
         var brandAllAgentGameTypeConditions = turnoverWinLosses.Select(x =>
-            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRebateTaskQueue.DequeueAsync(Arg.Any<CancellationToken>())
             .Returns(new PlayerAllAgentRebateQueueModel
@@ -52,12 +50,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task No_Create_Player_All_Agent_Distributions_When_Record_Existed()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -76,7 +72,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
             .Returns(true);
 
         var brandAllAgentGameTypeConditions = turnoverWinLosses.Select(x =>
-            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRebateTaskQueue.DequeueAsync(Arg.Any<CancellationToken>())
             .Returns(new PlayerAllAgentRebateQueueModel
@@ -99,12 +95,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task Create_Player_All_Agent_Distributions()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -123,7 +117,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
             .Returns(false);
 
         var brandAllAgentGameTypeConditions = turnoverWinLosses.Select(x =>
-            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            CreateValidBetConditionModelFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRebateTaskQueue.DequeueAsync(Arg.Any<CancellationToken>())
             .Returns(new PlayerAllAgentRebateQueueModel
@@ -152,12 +146,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task Create_Player_All_Agent_Distributions_By_Card_Game_Turnover()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -167,7 +159,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
         var turnoverWinLosses = CreateTurnoverWinLossFixture(brandId, GameType.CardGame, 100)
             .CreateMany<PlayerAllAgentTurnoverWinLossModel>(1);
 
-        var conditions = new BrandAllAgentGameTypeConditionModel[]
+        var conditions = new BrandAllAgentGameTypeConditionViewModel[]
         {
             new()
             {
@@ -246,12 +238,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task Create_Player_All_Agent_Distributions_By_Sports_Game_Turnover()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -261,7 +251,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
         var turnoverWinLosses = CreateTurnoverWinLossFixture(brandId, GameType.Sportsbook, 100)
             .CreateMany<PlayerAllAgentTurnoverWinLossModel>(1);
 
-        var conditions = new BrandAllAgentGameTypeConditionModel[]
+        var conditions = new BrandAllAgentGameTypeConditionViewModel[]
         {
             new()
             {
@@ -342,12 +332,10 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
     [Test]
     public async Task Create_Player_All_Agent_Distributions_For_Rank_3_Condition()
     {
-        var fakeMediator = Substitute.For<IMediator>();
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerAllAgentRebateTaskQueue = Substitute.For<IPlayerAllAgentRebateTaskQueue>();
 
         var sut = new PlayerAllAgentRebateTaskQueueProcessor(
-            fakeMediator,
             fakePlayerAllAgentRebateTaskQueue,
             fakePlayerAllAgentRepository,
             NullLogger<PlayerAllAgentRebateTaskQueueProcessor>.Instance);
@@ -359,7 +347,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
                 CreateTurnoverWinLossFixture(brandId, GameType.Sportsbook, 100)
                     .Create<PlayerAllAgentTurnoverWinLossModel>());
 
-        var conditions = new BrandAllAgentGameTypeConditionModel[]
+        var conditions = new BrandAllAgentGameTypeConditionViewModel[]
         {
             new()
             {
@@ -463,7 +451,7 @@ public class PlayerAllAgentRebateTaskQueueProcessorTests
         PlayerAllAgentTurnoverWinLossModel model)
     {
         var fixture = new Fixture();
-        fixture.Customize<BrandAllAgentGameTypeConditionModel>(u
+        fixture.Customize<BrandAllAgentGameTypeConditionViewModel>(u
             => u.With(x => x.BrandId, model.BrandId)
                 .With(x => x.AllAgentGameType, AllAgentGameType.Sportsbook)
                 .With(x => x.AllAgentRebateType, AllAgentRebateType.ValidBet)

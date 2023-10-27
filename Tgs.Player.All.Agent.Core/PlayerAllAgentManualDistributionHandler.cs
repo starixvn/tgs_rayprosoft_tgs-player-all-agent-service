@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Tgs.Player.All.Agent.Domain.Events;
+using Tgs.Player.All.Agent.Core.Workers;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
 
@@ -9,15 +10,15 @@ namespace Tgs.Player.All.Agent.Core;
 internal class PlayerAllAgentManualDistributionHandler : IRequestHandler<PlayerAllAgentManualDistributionRequest>
 {
     private readonly ILogger<PlayerAllAgentManualDistributionHandler> _logger;
-    private readonly IMediator _mediator;
     private readonly IPlayerAllAgentRepository _playerAllAgentRepository;
+    private readonly IPlayerAllAgentRebateDistributionTaskQueue _taskQueue;
 
     public PlayerAllAgentManualDistributionHandler(IPlayerAllAgentRepository playerAllAgentRepository,
-        IMediator mediator,
+        IPlayerAllAgentRebateDistributionTaskQueue taskQueue,
         ILogger<PlayerAllAgentManualDistributionHandler> logger)
     {
         _playerAllAgentRepository = playerAllAgentRepository;
-        _mediator = mediator;
+        _taskQueue = taskQueue;
         _logger = logger;
     }
 
@@ -30,14 +31,9 @@ internal class PlayerAllAgentManualDistributionHandler : IRequestHandler<PlayerA
         var readToSendRebates =
             _playerAllAgentRepository.GetNotSentRebatesAsync(request.From, request.To);
 
-        await readToSendRebates.ForEachAwaitWithCancellationAsync(async (x, c) =>
-            {
-                await _mediator.Publish(new CreatePlayerBucketEvent(x), cancellationToken);
-
-                await _playerAllAgentRepository.SetDistributedAsync(x.Id, cancellationToken);
-
-                await _mediator.Publish(new DistributeRebateEvent(x), cancellationToken);
-            },
+        await readToSendRebates.ForEachAwaitAsync(async x =>
+                await _taskQueue.QueuePlayerRebateDistributionAsync(new PlayerAllAgentRebateDistributionQueueModel
+                    { Contributor = x }),
             cancellationToken);
     }
 }

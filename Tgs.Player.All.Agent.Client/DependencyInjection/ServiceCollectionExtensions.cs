@@ -13,7 +13,14 @@ public static class ServiceCollectionExtensions
             .AddOptions<PlayerAllAgentOptions>()
             .Configure(configure)
             .Services
-            .AddHttpClient<IPlayerAllAgentClient, PlayerAllAgentClient>((sp, c) =>
+            .AddHttpClient<IPlayerAllAgentScheduleClient, PlayerAllAgentScheduleClient>((sp, c) =>
+            {
+                var options = sp.GetRequiredService<IOptions<PlayerAllAgentOptions>>().Value;
+
+                c.BaseAddress = options.Url;
+            })
+            .Services
+            .AddHttpClient<IBrandAllAgentClient, BrandAllAgentClient>((sp, c) =>
             {
                 var options = sp.GetRequiredService<IOptions<PlayerAllAgentOptions>>().Value;
 

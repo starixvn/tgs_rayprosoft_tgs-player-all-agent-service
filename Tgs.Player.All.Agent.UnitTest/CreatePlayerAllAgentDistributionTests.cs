@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Tgs.Player.All.Agent.Core;
 using Tgs.Player.All.Agent.Core.Workers;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
@@ -26,7 +27,7 @@ public class CreatePlayerAllAgentDistributionTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -59,7 +60,7 @@ public class CreatePlayerAllAgentDistributionTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var condition = CreateConditionFixture(validPlayers.First().BrandId)
-            .Create<BrandAllAgentGameTypeConditionModel>();
+            .Create<BrandAllAgentGameTypeConditionViewModel>();
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -80,7 +81,7 @@ public class CreatePlayerAllAgentDistributionTests
     private Fixture CreateConditionFixture(Guid brandId)
     {
         var fixture = new Fixture();
-        fixture.Customize<BrandAllAgentGameTypeConditionModel>(u => u
+        fixture.Customize<BrandAllAgentGameTypeConditionViewModel>(u => u
             .With(s => s.BrandId, brandId));
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
         return fixture;

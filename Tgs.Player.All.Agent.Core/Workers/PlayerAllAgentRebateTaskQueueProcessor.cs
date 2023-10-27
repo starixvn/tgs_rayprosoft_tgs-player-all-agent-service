@@ -1,8 +1,6 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using TGS.Core.Infrastructures.Extensions;
 using Tgs.Player.All.Agent.Domain.Enums;
-using Tgs.Player.All.Agent.Domain.Events;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
 
@@ -16,12 +14,10 @@ public interface IPlayerAllAgentRebateTaskQueueProcessor
 public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQueueProcessor
 {
     private readonly ILogger<PlayerAllAgentRebateTaskQueueProcessor> _logger;
-    private readonly IMediator _mediator;
     private readonly IPlayerAllAgentRepository _playerAllAgentRepository;
     private readonly IPlayerAllAgentRebateTaskQueue _taskQueue;
 
     public PlayerAllAgentRebateTaskQueueProcessor(
-        IMediator mediator,
         IPlayerAllAgentRebateTaskQueue taskQueue,
         IPlayerAllAgentRepository playerAllAgentRepository,
         ILogger<PlayerAllAgentRebateTaskQueueProcessor> logger)
@@ -29,14 +25,13 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
         _taskQueue = taskQueue;
         _logger = logger;
         _playerAllAgentRepository = playerAllAgentRepository;
-        _mediator = mediator;
     }
 
     public async Task ProcessQueueAsync(CancellationToken cancellationToken)
     {
         var request = await _taskQueue.DequeueAsync(cancellationToken);
 
-        _logger.LogInformation("player all_agent_rebate request: {request}", request);
+        _logger.LogInformation("player all agent rebate request: {request}", request);
 
         var playerAggregate =
             _playerAllAgentRepository.GetPlayerAllAgentTurnoverWinLossAsync(request.From,
@@ -67,21 +62,10 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
             request.To,
             childPlayers,
             cancellationToken);
-
-        foreach (var childPlayer in childPlayers)
-        {
-            await _mediator.Publish(new CreatePlayerBucketEvent(childPlayer), cancellationToken);
-
-            await _playerAllAgentRepository.SetDistributedAsync(childPlayer.Id, cancellationToken);
-
-            await _mediator.Publish(new DistributeRebateEvent(childPlayer), cancellationToken);
-
-            await Task.Delay(200, cancellationToken);
-        }
     }
 
     private static bool MatchConditionSetting(PlayerAllAgentTurnoverWinLossPlayerNumberModel model,
-        IEnumerable<BrandAllAgentGameTypeConditionModel> conditions)
+        IEnumerable<BrandAllAgentGameTypeConditionViewModel> conditions)
     {
         return conditions.Any(x => model.BrandId == x.BrandId &&
                                    model.AllAgentGameType == x.AllAgentGameType);
@@ -89,7 +73,7 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
 
     private static PlayerAllAgentRebateModel CheckRebate(
         PlayerAllAgentTurnoverWinLossPlayerNumberModel model,
-        IEnumerable<BrandAllAgentGameTypeConditionModel> gameTypeConditions)
+        IEnumerable<BrandAllAgentGameTypeConditionViewModel> gameTypeConditions)
     {
         var conditions = gameTypeConditions.Where(x => model.BrandId == x.BrandId &&
                                                        model.AllAgentGameType == x.AllAgentGameType)
@@ -126,7 +110,7 @@ public class PlayerAllAgentRebateTaskQueueProcessor : IPlayerAllAgentRebateTaskQ
 
     private static IEnumerable<PlayerAllAgentRebateModel> GetRebates(
         IEnumerable<PlayerAllAgentTurnoverWinLossModel> models,
-        IEnumerable<BrandAllAgentGameTypeConditionModel> gameTypeConditions)
+        IEnumerable<BrandAllAgentGameTypeConditionViewModel> gameTypeConditions)
     {
         var playerTurnovers =
             models

@@ -3,9 +3,9 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Tgs.Player.All.Agent.Client;
-using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
+using SettlementIntervalType = Tgs.Player.All.Agent.Domain.Enums.SettlementIntervalType;
 
 namespace Tgs.Player.All.Agent.IntegrationTest;
 
@@ -23,7 +23,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -42,7 +42,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             await sut.CreateDailyPlayerAllAgentRebatesAsync();
 
@@ -60,7 +60,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -79,7 +79,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             await sut.CreateWeeklyPlayerAllAgentRebatesAsync();
 
@@ -97,7 +97,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -116,7 +116,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             await sut.CreateMonthlyPlayerAllAgentRebatesAsync();
 
@@ -134,7 +134,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -153,7 +153,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             await sut.ManualCreateDailyPlayerAllAgentRebatesAsync(DateOnly.Parse("2023-01-01"));
 
@@ -171,7 +171,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -190,7 +190,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             await sut.ManualCreateWeeklyPlayerAllAgentRebatesAsync(DateOnly.Parse("2023-01-01"));
 
@@ -208,7 +208,7 @@ public class PlayerAllAgentTests
         var validPlayers = fixture.CreateMany<ValidPlayer>(10);
 
         var conditions = validPlayers.Select(x => x.BrandId)
-            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionModel>());
+            .Select(x => CreateConditionFixture(x).Create<BrandAllAgentGameTypeConditionViewModel>());
 
         fakePlayerAllAgentRepository
             .GetValidPlayersAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>(), Arg.Any<SettlementIntervalType>())
@@ -227,7 +227,7 @@ public class PlayerAllAgentTests
 
         var httpClient = web.CreateClient();
         {
-            var sut = new PlayerAllAgentClient(httpClient);
+            var sut = new PlayerAllAgentScheduleClient(httpClient);
 
             var from = DateTimeOffset.Parse("2023-10-16 00:00+8");
             var to = DateTimeOffset.Parse("2023-10-23 00:00+8");
@@ -241,7 +241,7 @@ public class PlayerAllAgentTests
     private Fixture CreateConditionFixture(Guid brandId)
     {
         var fixture = new Fixture();
-        fixture.Customize<BrandAllAgentGameTypeConditionModel>(u => u
+        fixture.Customize<BrandAllAgentGameTypeConditionViewModel>(u => u
             .With(s => s.BrandId, brandId));
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
         return fixture;

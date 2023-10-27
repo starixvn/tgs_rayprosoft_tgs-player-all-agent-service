@@ -9,7 +9,7 @@ public interface IPlayerAllAgentRepository
         DateTime to,
         SettlementIntervalType settlementIntervalType);
 
-    IAsyncEnumerable<BrandAllAgentGameTypeConditionModel> GetBrandAllAgentGameTypeConditionsAsync(Guid[] brandIds);
+    IAsyncEnumerable<BrandAllAgentGameTypeConditionViewModel> GetBrandAllAgentGameTypeConditionsAsync(Guid[] brandIds);
 
     IAsyncEnumerable<PlayerAllAgentRebateContributorModel> GetNotSentRebatesAsync(DateTime from, DateTime to);
 

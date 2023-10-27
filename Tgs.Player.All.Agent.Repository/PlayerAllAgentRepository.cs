@@ -21,16 +21,16 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
     {
         return _tgsContext
             .BrandAllAgents
-            .Join(_tgsContext.Brands.Where(x =>
-                    x.PlayerAllAgentSettlementIntervalType == (short)settlementIntervalType),
+            .Join(_tgsContext.BrandAllAgentSettings.Where(x =>
+                    x.SettlementIntervalType == (short)settlementIntervalType),
                 brandAllAgent => brandAllAgent.BrandId,
-                brand => brand.Id,
-                (brandAllAgent, brand) => new { brand.Id }
+                brand => brand.BrandId,
+                (brandAllAgent, brand) => new { brand.BrandId }
             )
             .Join(
                 _tgsContext.PlayerGameRebateAggregates
                     .Where(x => x.ReportDate >= from && x.ReportDate <= to),
-                brand => brand.Id,
+                brand => brand.BrandId,
                 aggregate => aggregate.BrandId,
                 (brandAllAgent, aggregate) => new
                 {
@@ -84,7 +84,7 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
             .ToAsyncEnumerable();
     }
 
-    public IAsyncEnumerable<BrandAllAgentGameTypeConditionModel> GetBrandAllAgentGameTypeConditionsAsync(
+    public IAsyncEnumerable<BrandAllAgentGameTypeConditionViewModel> GetBrandAllAgentGameTypeConditionsAsync(
         Guid[] brandIds)
     {
         return _tgsContext.BrandAllAgents.Join(
@@ -99,7 +99,7 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
             .Where(x => brandIds.Contains(x.BrandId))
             .Where(x => x.GameType.Switch)
             .Where(x => x.GameType.HasValidBet || x.GameType.HasWinLoss)
-            .Select(x => new BrandAllAgentGameTypeConditionModel
+            .Select(x => new BrandAllAgentGameTypeConditionViewModel
             {
                 BrandId = x.BrandId,
                 GameTypeSwitch = x.GameType.Switch,

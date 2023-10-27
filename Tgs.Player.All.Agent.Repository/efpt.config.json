@@ -24,6 +24,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "dbo.brand_all_agent_settings",
+         "ObjectType": 0
+      },
+      {
          "Name": "dbo.brand_all_agents",
          "ObjectType": 0
       },

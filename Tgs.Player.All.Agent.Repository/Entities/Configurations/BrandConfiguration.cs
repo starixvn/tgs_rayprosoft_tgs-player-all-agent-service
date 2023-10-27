@@ -86,9 +86,6 @@ namespace Tgs.Player.All.Agent.Repository.Entities.Configurations
             entity.Property(e => e.PlatformCharge)
             .HasPrecision(9, 6)
             .HasColumnName("platform_charge");
-            entity.Property(e => e.PlayerAllAgentSettlementIntervalType)
-            .HasDefaultValueSql("3")
-            .HasColumnName("player_all_agent_settlement_interval_type");
             entity.Property(e => e.PlayerRegisterFlowSettings)
             .HasColumnType("jsonb")
             .HasColumnName("player_register_flow_settings");

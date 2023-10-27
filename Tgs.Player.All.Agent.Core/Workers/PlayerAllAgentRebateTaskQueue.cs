@@ -1,5 +1,5 @@
 ﻿using System.Threading.Channels;
-using Tgs.Player.All.Agent.Domain.Models;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 
 namespace Tgs.Player.All.Agent.Core.Workers;
 

@@ -1,9 +1,9 @@
 using AutoFixture;
-using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Tgs.Player.All.Agent.Core;
-using Tgs.Player.All.Agent.Domain.Events;
+using Tgs.Player.All.Agent.Core.Workers;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
 
@@ -15,11 +15,12 @@ public class PlayerAllAgentManualDistributionTests
     public async Task Create_Player_All_Agent_Distributions()
     {
         var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
-        var fakeMediator = Substitute.For<IMediator>();
+        var fakePlayerAllAgentRebateDistributionTaskQueue =
+            Substitute.For<IPlayerAllAgentRebateDistributionTaskQueue>();
 
         var sut = new PlayerAllAgentManualDistributionHandler(
             fakePlayerAllAgentRepository,
-            fakeMediator,
+            fakePlayerAllAgentRebateDistributionTaskQueue,
             NullLogger<PlayerAllAgentManualDistributionHandler>.Instance);
 
         var fixture = new Fixture();
@@ -33,9 +34,7 @@ public class PlayerAllAgentManualDistributionTests
 
         await sut.Handle(request, default);
 
-        await fakeMediator.Received(10).Publish(Arg.Any<CreatePlayerBucketEvent>());
-        await fakePlayerAllAgentRepository.Received(10)
-            .SetDistributedAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
-        await fakeMediator.Received(10).Publish(Arg.Any<DistributeRebateEvent>());
+        await fakePlayerAllAgentRebateDistributionTaskQueue.Received(10)
+            .QueuePlayerRebateDistributionAsync(Arg.Any<PlayerAllAgentRebateDistributionQueueModel>());
     }
 }

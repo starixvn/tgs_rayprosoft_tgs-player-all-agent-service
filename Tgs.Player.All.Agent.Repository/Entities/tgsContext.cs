@@ -23,6 +23,8 @@ public partial class tgsContext : DbContext
 
     public virtual DbSet<BrandAllAgentGameTypeCondition> BrandAllAgentGameTypeConditions { get; set; }
 
+    public virtual DbSet<BrandAllAgentSetting> BrandAllAgentSettings { get; set; }
+
     public virtual DbSet<BrandGame> BrandGames { get; set; }
 
     public virtual DbSet<PlayerAllAgentRebateContributor> PlayerAllAgentRebateContributors { get; set; }
@@ -46,6 +48,7 @@ public partial class tgsContext : DbContext
             modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentGameTypeConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentGameTypeConditionConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentSettingConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.BrandGameConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PlayerAllAgentRebateContributorConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PlayerAllAgentRebateRecordConfiguration());

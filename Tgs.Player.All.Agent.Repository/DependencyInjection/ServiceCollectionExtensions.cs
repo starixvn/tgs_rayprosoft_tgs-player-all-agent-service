@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddDbContext<tgsContext>(dbContextConfigure)
-            .AddTransient<IPlayerAllAgentRepository, PlayerAllAgentRepository>();
+            .AddTransient<IPlayerAllAgentRepository, PlayerAllAgentRepository>()
+            .AddTransient<IBrandAllAgentRepository, BrandAllAgentRepository>();
     }
 }

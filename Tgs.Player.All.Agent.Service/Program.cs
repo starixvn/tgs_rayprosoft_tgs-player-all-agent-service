@@ -14,7 +14,9 @@ builder.Configuration
 
 builder.Host.ConfigureServices((context, services) => services
     .AddHostedService<PlayerAllAgentRebateBackground>()
-    .AddSingleton<IPlayerAllAgentRebateTaskQueue, PlayerAllAgentRebateTaskQueue>());
+    .AddSingleton<IPlayerAllAgentRebateTaskQueue, PlayerAllAgentRebateTaskQueue>()
+    .AddHostedService<PlayerAllAgentRebateDistributionBackground>()
+    .AddSingleton<IPlayerAllAgentRebateDistributionTaskQueue, PlayerAllAgentRebateDistributionTaskQueue>());
 
 builder.Services
     .AddCore()

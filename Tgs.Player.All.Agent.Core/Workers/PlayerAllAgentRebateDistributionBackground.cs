@@ -1,0 +1,50 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace Tgs.Player.All.Agent.Core.Workers;
+
+public class PlayerAllAgentRebateDistributionBackground : BackgroundService
+{
+    private readonly ILogger<PlayerAllAgentRebateDistributionBackground> _logger;
+    private readonly IServiceProvider _serviceProvider;
+
+    public PlayerAllAgentRebateDistributionBackground(
+        IServiceProvider serviceProvider,
+        ILogger<PlayerAllAgentRebateDistributionBackground> logger)
+    {
+        _logger = logger;
+        _serviceProvider = serviceProvider;
+    }
+
+    public override async Task StopAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("Queued Hosted Service is stopping.");
+
+        await base.StopAsync(stoppingToken);
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation(
+            "Player All Agent Rebate Queued Hosted Service is running.");
+
+        await BackgroundProcessingAsync(stoppingToken);
+    }
+
+    private async Task BackgroundProcessingAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+            try
+            {
+                using var scope = _serviceProvider.CreateScope();
+                var processor = scope.ServiceProvider
+                    .GetRequiredService<IPlayerAllAgentRebateDistributionTaskQueueProcessor>();
+                await processor.ProcessQueueAsync(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred executing task work item.");
+            }
+    }
+}

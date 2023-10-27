@@ -2,7 +2,7 @@
 
 namespace Tgs.Player.All.Agent.Domain.Models;
 
-public class BrandAllAgentGameTypeConditionModel
+public class BrandAllAgentGameTypeConditionViewModel
 {
     public Guid BrandId { get; set; }
 

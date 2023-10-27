@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Tgs.Player.All.Agent.Core.Workers;
+using Tgs.Player.All.Agent.Domain.BackgroundQueue;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
 
@@ -39,7 +40,7 @@ internal class CreatePlayerAllAgentDistributionHandler : IRequestHandler<CreateP
             await _playerAllAgentRepository.GetBrandAllAgentGameTypeConditionsAsync(brandIds)
                 .ToArrayAsync(cancellationToken);
 
-        await validPlayerCodes.ForEachAwaitWithCancellationAsync(async (x, c) =>
+        await validPlayerCodes.ForEachAwaitAsync(async (x, c) =>
             {
                 var conditions = brandAllAgentGameTypeConditions.Where(b => b.BrandId == x.BrandId);
 

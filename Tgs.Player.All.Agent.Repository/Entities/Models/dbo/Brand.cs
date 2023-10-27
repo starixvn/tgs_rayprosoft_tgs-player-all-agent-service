@@ -95,8 +95,6 @@ public partial class Brand
 
     public int? TimeSpanMinutes { get; set; }
 
-    public short PlayerAllAgentSettlementIntervalType { get; set; }
-
     public virtual ICollection<BrandGame> BrandGames { get; set; } = new List<BrandGame>();
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
