@@ -117,6 +117,10 @@ spec:
             limits:
               cpu: 250m
               memory: 256Mi
+      volumes:
+        - name: appsettings
+          configMap:
+            name: configmap-{{ include "player-all-agent-service.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
