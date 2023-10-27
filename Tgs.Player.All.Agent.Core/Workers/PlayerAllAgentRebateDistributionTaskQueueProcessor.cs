@@ -35,10 +35,12 @@ public class PlayerAllAgentRebateDistributionTaskQueueProcessor : IPlayerAllAgen
 
         _logger.LogInformation("player all agent rebate distribution request: {request}", request);
 
-        await _mediator.Publish(new CreatePlayerBucketEvent(request.Contributor), cancellationToken);
-
         await _playerAllAgentRepository.SetDistributedAsync(request.Contributor.Id, cancellationToken);
 
+        await _mediator.Publish(new CreatePlayerBucketEvent(request.Contributor), cancellationToken);
+
         await _mediator.Publish(new DistributeRebateEvent(request.Contributor), cancellationToken);
+
+        await Task.Delay(200, cancellationToken);
     }
 }
