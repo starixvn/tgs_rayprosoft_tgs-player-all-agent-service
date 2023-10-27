@@ -1,0 +1,83 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "tgsContext",
+   "ContextNamespace": "Entities",
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": "Entities",
+   "OutputContextPath": "Entities",
+   "OutputPath": "Entities\\Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Tgs.Player.All.Agent.Repository",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "dbo.brand_all_agent_game_type_conditions",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.brand_all_agent_game_types",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.brand_all_agent_settings",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.brand_all_agents",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.brand_games",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.brands",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.player_all_agent_rebate_contributors",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.player_all_agent_rebate_records",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.player_parents",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.transactions",
+         "ObjectType": 0
+      },
+      {
+         "Name": "report.player_game_rebate_aggregates",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "tgs",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": true,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": true,
+   "UseT4": false
+}
