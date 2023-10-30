@@ -53,6 +53,43 @@ public class BrandAllAgentTests
     }
 
     [Test]
+    public async Task Get_Brand_All_Agent_When_SettleIntervalType_Is_Null()
+    {
+        var fakeMediator = Substitute.For<IMediator>();
+
+        var brandId = Guid.NewGuid();
+
+        fakeMediator.Send(Arg.Any<GetBrandAllAgentRequest>())
+            .Returns(new BrandAllAgentViewModel(true, null));
+
+        await using var web = new TestApplication(builder =>
+            builder.ConfigureServices(service =>
+                {
+                    service.AddSingleton(fakeMediator);
+                }
+            ));
+
+        var httpClient = web.CreateClient();
+        {
+            var sut = new BrandAllAgentClient(httpClient);
+
+            var request = new Client.Models.GetBrandAllAgentRequest(brandId);
+
+            var response = await sut.GetBrandAllAgentAsync(request);
+
+            Assert.That(response, Is.Not.Null);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.Switch, Is.EqualTo(true));
+                Assert.That(response.SettlementIntervalType, Is.EqualTo(null));
+            });
+
+            await fakeMediator.Received(1).Send(Arg.Any<GetBrandAllAgentRequest>());
+        }
+    }
+
+    [Test]
     public async Task Get_Brand_All_Agent_Game_Types()
     {
         var fakeMediator = Substitute.For<IMediator>();
