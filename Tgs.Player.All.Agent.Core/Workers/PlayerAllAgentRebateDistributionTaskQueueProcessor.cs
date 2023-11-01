@@ -41,6 +41,6 @@ public class PlayerAllAgentRebateDistributionTaskQueueProcessor : IPlayerAllAgen
 
         await _mediator.Publish(new DistributeRebateEvent(request.Contributor), cancellationToken);
 
-        await Task.Delay(200, cancellationToken);
+        await Task.Delay(1000, cancellationToken);
     }
 }
