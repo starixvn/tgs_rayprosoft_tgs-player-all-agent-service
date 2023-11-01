@@ -12,25 +12,23 @@ internal class DistributeRebateEventHandler : INotificationHandler<DistributeReb
 {
     private readonly ICashServiceClient _cashServiceClient;
     private readonly ILogger<CreatePlayerBucketEventHandler> _logger;
-    private readonly IPlayerAllAgentRepository _playerRepository;
     private readonly IPlayerServiceClient _playerServiceClient;
 
     public DistributeRebateEventHandler(
         ICashServiceClient cashServiceClient,
-        IPlayerAllAgentRepository playerRepository,
         IPlayerServiceClient playerServiceClient,
         ILogger<CreatePlayerBucketEventHandler> logger)
     {
         _logger = logger;
         _cashServiceClient = cashServiceClient;
         _playerServiceClient = playerServiceClient;
-        _playerRepository = playerRepository;
     }
 
     public async Task Handle(DistributeRebateEvent @event, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Player All Agent ParentPlayerCode:{PlayerCode} RebateAmount:{totalRebate}",
+        _logger.LogInformation("Player all agent distribution ParentPlayerCode:{PlayerCode} ChildPlayerCode:{ChildPlayerCode} RebateAmount:{totalRebate}",
             @event.PlayerAllAgentRebateContributor.PlayerCode,
+            @event.PlayerAllAgentRebateContributor.ChildPlayerCode,
             @event.PlayerAllAgentRebateContributor.TotalRebate);
 
         var parentPlayer = await _playerServiceClient
@@ -43,31 +41,11 @@ internal class DistributeRebateEventHandler : INotificationHandler<DistributeReb
             .GetPlayerInfoAsync(@event.PlayerAllAgentRebateContributor.ChildPlayerCode, cancellationToken)
             .ConfigureAwait(false);
 
-        await Policy.Handle<HttpRequestException>()
-            .WaitAndRetryAsync(
-                3,
-                retryAttempt => TimeSpan.FromSeconds(10),
-                (exception, time, retryCount, context) => _logger.LogError(
-                    "Player All Agent externalId:{id} ParentPlayerCode:{PlayerCode} RebateAmount:{totalRebate} retryCount:{retryCount} Exception:{exception}",
-                    @event.PlayerAllAgentRebateContributor.Id,
-                    @event.PlayerAllAgentRebateContributor.PlayerCode,
-                    @event.PlayerAllAgentRebateContributor.TotalRebate,
-                    retryCount,
-                    exception))
-            .ExecuteAsync(
-                async () =>
-                {
-                    if (!await _playerRepository.CheckTransactionByExternalIdExistsAsync(
-                            @event.PlayerAllAgentRebateContributor.PlayerCode,
-                            @event.PlayerAllAgentRebateContributor.Id.ToString(),
-                            cancellationToken))
-                        _ = await _cashServiceClient.DividendAllAgentRebateAsync(
-                                defaultWalletId,
-                                @event.PlayerAllAgentRebateContributor.TotalRebate,
-                                $"player name: {player?.UserName}",
-                                @event.PlayerAllAgentRebateContributor.Id.ToString(),
-                                cancellationToken)
-                            .ConfigureAwait(false);
-                });
+        _ = await _cashServiceClient.DividendAllAgentRebateAsync(
+            defaultWalletId,
+            @event.PlayerAllAgentRebateContributor.TotalRebate,
+            $"player name: {player?.UserName}",
+            @event.PlayerAllAgentRebateContributor.Id.ToString(),
+            cancellationToken);
     }
 }

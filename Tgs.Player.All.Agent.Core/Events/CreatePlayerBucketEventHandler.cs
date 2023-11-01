@@ -21,15 +21,16 @@ internal class CreatePlayerBucketEventHandler : INotificationHandler<CreatePlaye
 
     public async Task Handle(CreatePlayerBucketEvent @event, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Player All Agent ParentPlayerCode:{rebate.PlayerCode} RebateAmount:{totalRebate}",
+        _logger.LogInformation("Player all agent create player bucket ParentPlayerCode:{rebate.PlayerCode} ChildPlayerCode:{ChildPlayerCode} RebateAmount:{totalRebate}",
             @event.PlayerAllAgentRebateContributor.PlayerCode,
+            @event.PlayerAllAgentRebateContributor.ChildPlayerCode,
             @event.PlayerAllAgentRebateContributor.TotalRebate);
 
         await Policy.Handle<Exception>()
             .RetryAsync(
                 3,
                 (exception, retryCount) => _logger.LogError(
-                    "Player All Agent ParentPlayerCode:{rebate.PlayerCode} RebateAmount:{totalRebate} retryCount:{retryCount} Exception:{exception}",
+                    "Player all agent create player bucket ParentPlayerCode:{rebate.PlayerCode} RebateAmount:{totalRebate} retryCount:{retryCount} Exception:{exception}",
                     @event.PlayerAllAgentRebateContributor.PlayerCode,
                     @event.PlayerAllAgentRebateContributor.TotalRebate,
                     retryCount,
