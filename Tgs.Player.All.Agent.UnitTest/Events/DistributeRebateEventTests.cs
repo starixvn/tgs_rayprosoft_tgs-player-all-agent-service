@@ -16,12 +16,10 @@ public class DistributeRebateEventTests
     public async Task Create_Distribute_Rebate_Event()
     {
         var fakeCashServiceClient = Substitute.For<ICashServiceClient>();
-        var fakePlayerAllAgentRepository = Substitute.For<IPlayerAllAgentRepository>();
         var fakePlayerServiceClient = Substitute.For<IPlayerServiceClient>();
 
         var sut = new DistributeRebateEventHandler(
             fakeCashServiceClient,
-            fakePlayerAllAgentRepository,
             fakePlayerServiceClient,
             NullLogger<CreatePlayerBucketEventHandler>.Instance);
 

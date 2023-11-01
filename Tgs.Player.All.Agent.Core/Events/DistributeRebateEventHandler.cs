@@ -12,19 +12,16 @@ internal class DistributeRebateEventHandler : INotificationHandler<DistributeReb
 {
     private readonly ICashServiceClient _cashServiceClient;
     private readonly ILogger<CreatePlayerBucketEventHandler> _logger;
-    private readonly IPlayerAllAgentRepository _playerRepository;
     private readonly IPlayerServiceClient _playerServiceClient;
 
     public DistributeRebateEventHandler(
         ICashServiceClient cashServiceClient,
-        IPlayerAllAgentRepository playerRepository,
         IPlayerServiceClient playerServiceClient,
         ILogger<CreatePlayerBucketEventHandler> logger)
     {
         _logger = logger;
         _cashServiceClient = cashServiceClient;
         _playerServiceClient = playerServiceClient;
-        _playerRepository = playerRepository;
     }
 
     public async Task Handle(DistributeRebateEvent @event, CancellationToken cancellationToken)
