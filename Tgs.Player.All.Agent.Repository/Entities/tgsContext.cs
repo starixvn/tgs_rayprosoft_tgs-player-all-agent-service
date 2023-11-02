@@ -44,17 +44,7 @@ public partial class tgsContext : DbContext
             .HasPostgresExtension("pg_trgm")
             .HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentGameTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentGameTypeConditionConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandAllAgentSettingConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandGameConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerAllAgentRebateContributorConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerAllAgentRebateRecordConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerGameRebateAggregateConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerParentConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.TransactionConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(tgsContext).Assembly);
         OnModelCreatingPartial(modelBuilder);
     }
 
