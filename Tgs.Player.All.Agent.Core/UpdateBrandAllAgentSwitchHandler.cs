@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
 
@@ -22,6 +23,10 @@ internal class UpdateBrandAllAgentSwitchHandler : IRequestHandler<UpdateBrandAll
     {
         _logger.LogInformation("Update brand switch:{request}", request);
 
-        return _brandAllAgentRepository.UpdateSwitchAsync(request.BrandId, request.Switch, cancellationToken);
+        _brandAllAgentRepository.UpdateSwitchAsync(request.BrandId, request.Switch, cancellationToken);
+
+        return _brandAllAgentRepository.UpdateSettleIntervalAsync(request.BrandId,
+            SettlementIntervalType.Daily,
+            cancellationToken);
     }
 }
