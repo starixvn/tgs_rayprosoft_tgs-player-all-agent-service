@@ -33,6 +33,17 @@ public class BrandAllAgentRepository : IBrandAllAgentRepository
                 .ExecuteUpdateAsync(x => x.SetProperty(s => s.Switch, @switch), cancellationToken)
                 .ConfigureAwait(false);
 
+        var brandIdExists = await _tgsContext.BrandAllAgents.AnyAsync(x => x.BrandId == brandId, cancellationToken);
+
+        if (@switch && !brandIdExists)
+        {
+            await _tgsContext.BrandAllAgents.AddAsync(new BrandAllAgent { BrandId = brandId }, cancellationToken);
+        }
+        else
+        {
+            await _tgsContext.BrandAllAgents.Where(x => x.BrandId == brandId).ExecuteDeleteAsync(cancellationToken: cancellationToken);
+        }
+
         await _tgsContext.SaveChangesAsync(cancellationToken);
     }
 
