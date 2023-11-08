@@ -23,10 +23,6 @@ internal class UpdateBrandAllAgentSwitchHandler : IRequestHandler<UpdateBrandAll
     {
         _logger.LogInformation("Update brand switch:{request}", request);
 
-        _brandAllAgentRepository.UpdateSwitchAsync(request.BrandId, request.Switch, cancellationToken);
-
-        return _brandAllAgentRepository.UpdateSettleIntervalAsync(request.BrandId,
-            SettlementIntervalType.Daily,
-            cancellationToken);
+        return _brandAllAgentRepository.UpdateSwitchAsync(request.BrandId, request.Switch, cancellationToken);
     }
 }
