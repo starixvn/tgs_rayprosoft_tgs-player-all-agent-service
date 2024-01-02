@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tgs.Player.All.Agent.Core\Tgs.Player.All.Agent.Core.csproj" />
+    <ProjectReference Include="..\Tgs.Player.All.Agent.Service\Tgs.Player.All.Agent.Service.csproj" />
   </ItemGroup>
 
 </Project>
