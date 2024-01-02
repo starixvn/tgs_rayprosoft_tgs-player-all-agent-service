@@ -19,14 +19,8 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
         DateTime to,
         SettlementIntervalType settlementIntervalType)
     {
-        return _tgsContext
-            .BrandAllAgents
-            .Join(_tgsContext.BrandAllAgentSettings.Where(x =>
-                    x.SettlementIntervalType == (short)settlementIntervalType),
-                brandAllAgent => brandAllAgent.BrandId,
-                brand => brand.BrandId,
-                (brandAllAgent, brand) => new { brand.BrandId }
-            )
+        return _tgsContext.BrandAllAgentSettings.Where(x =>
+                x.SettlementIntervalType == (short)settlementIntervalType && x.Switch)
             .Join(
                 _tgsContext.PlayerGameRebateAggregates
                     .Where(x => x.ReportDate >= from && x.ReportDate <= to),
@@ -87,7 +81,9 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
     public IAsyncEnumerable<BrandAllAgentGameTypeConditionViewModel> GetBrandAllAgentGameTypeConditionsAsync(
         Guid[] brandIds)
     {
-        return _tgsContext.BrandAllAgents.Join(
+        return _tgsContext.BrandAllAgentSettings
+            .Where(x => x.Switch)
+            .Join(
                 _tgsContext.BrandAllAgentGameTypes,
                 brand => brand.BrandId,
                 gameType => gameType.BrandId,
