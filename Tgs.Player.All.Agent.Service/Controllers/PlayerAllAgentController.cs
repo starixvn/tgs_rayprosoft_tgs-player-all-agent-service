@@ -50,9 +50,9 @@ public class PlayerAllAgentController : ControllerBase
             0,
             previousDay.Offset);
 
-        var weekFrom = reportDate.AddDays(-7).GetMonday();
+        var weekFrom = reportDate.GetMonday();
 
-        var weekTo = reportDate.AddDays(-7).GetSunday();
+        var weekTo = reportDate.GetSunday();
 
         return _mediator.Send(new CreatePlayerAllAgentDistributionRequest(SettlementIntervalType.Weekly,
             weekFrom.UtcDateTime,
@@ -63,15 +63,15 @@ public class PlayerAllAgentController : ControllerBase
     [Description("create monthly player all agent rebates")]
     public Task CreateMonthlyPlayerAllAgentRebatesAsync()
     {
-        var previousDay = DateTimeOffset.Now.ToOffset(new TimeSpan(8, 0, 0)).AddDays(-1);
+        var now = DateTimeOffset.Now.ToOffset(new TimeSpan(8, 0, 0));
 
-        var reportDate = new DateTimeOffset(previousDay.Year,
-            previousDay.Month,
-            previousDay.Day,
+        var reportDate = new DateTimeOffset(now.Year,
+            now.Month,
+            now.Day,
             0,
             0,
             0,
-            previousDay.Offset);
+            now.Offset);
 
         var monthFrom = reportDate.AddMonths(-1).GetFirstDayOfMonth();
 
