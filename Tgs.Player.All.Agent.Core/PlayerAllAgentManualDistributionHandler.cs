@@ -29,11 +29,13 @@ internal class PlayerAllAgentManualDistributionHandler : IRequestHandler<PlayerA
             request.To);
 
         var readToSendRebates =
-            _playerAllAgentRepository.GetNotSentRebatesAsync(request.From, request.To);
+            await _playerAllAgentRepository.GetNotSentRebatesAsync(request.From, request.To)
+                .ToArrayAsync(cancellationToken);
 
-        await readToSendRebates.ForEachAwaitAsync(async x =>
-                await _taskQueue.QueuePlayerRebateDistributionAsync(new PlayerAllAgentRebateDistributionQueueModel
-                    { Contributor = x }),
-            cancellationToken);
+        foreach (var playerAllAgentRebateContributorModel in readToSendRebates)
+        {
+            await _taskQueue.QueuePlayerRebateDistributionAsync(new PlayerAllAgentRebateDistributionQueueModel
+                { Contributor = playerAllAgentRebateContributorModel });
+        }
     }
 }
