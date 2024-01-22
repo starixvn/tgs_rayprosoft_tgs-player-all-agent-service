@@ -163,6 +163,31 @@ public class PlayerAllAgentRepository : IPlayerAllAgentRepository
                 player => player.PlayerCode,
                 (group, player) => new { Aggregate = group, Player = player })
             .Where(x => x.Player.ParentPlayerCode == parentPlayerCode)
+            .GroupJoin(_tgsContext.BrandGames,
+                group => new
+                {
+                    group.Aggregate.BrandId,
+                    group.Aggregate.GameId
+                },
+                brandGame => new
+                {
+                    brandGame.BrandId,
+                    brandGame.GameId
+                },
+                (aggregate, brandGame) => new
+                {
+                    aggregate.Aggregate,
+                    aggregate.Player,
+                    BrandGame = brandGame
+                })
+            .SelectMany(x => x.BrandGame.DefaultIfEmpty(),
+                (x, brandGame) => new
+                {
+                    x.Aggregate,
+                    x.Player,
+                    BrandGame = brandGame
+                })
+            .Where(x => x.BrandGame != null && x.BrandGame.Rebate)
             .GroupBy(x => new
                 {
                     x.Aggregate.BrandId,
