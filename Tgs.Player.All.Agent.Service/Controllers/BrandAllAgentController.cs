@@ -67,4 +67,11 @@ public class BrandAllAgentController : ControllerBase
     {
         return _mediator.CreateStream(new GetBrandAllAgentValidBetConditionsRequest(brandId, allAgentGameType));
     }
+
+    [HttpGet("{brandId}/all-valid-bet-conditions")]
+    [Description("Get all brand all agent valid bet conditions")]
+    public IAsyncEnumerable<ValidBetConditionViewModel> GetAllValidBetConditionsAsync(Guid brandId)
+    {
+        return _mediator.CreateStream(new GetBrandAllAllAgentValidBetConditionsRequest(brandId));
+    }
 }

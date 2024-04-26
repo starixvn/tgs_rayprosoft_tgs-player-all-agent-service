@@ -119,4 +119,22 @@ internal class BrandAllAgentClient : IBrandAllAgentClient
 
         await foreach (var validBetCondition in validBetConditions) yield return validBetCondition!;
     }
+
+    public async IAsyncEnumerable<ValidBetConditionModel> GetAllValidBetConditionsAsync(GetAllValidBetConditionsRequest request)
+    {
+        var response = await _client
+            .GetAsync($"/api/brandAllAgent/{request.BrandId}/all-valid-bet-conditions",
+                HttpCompletionOption.ResponseHeadersRead)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+
+        var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+        var validBetConditions = JsonSerializer.DeserializeAsyncEnumerable<ValidBetConditionModel>(
+            responseStream,
+            _jsonSerializerOptions);
+
+        await foreach (var validBetCondition in validBetConditions) yield return validBetCondition!;
+    }
 }

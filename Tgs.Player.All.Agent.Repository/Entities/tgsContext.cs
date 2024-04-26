@@ -15,6 +15,10 @@ public partial class tgsContext : DbContext
     {
     }
 
+    public tgsContext()
+    {
+    }
+
     public virtual DbSet<Brand> Brands { get; set; }
 
     public virtual DbSet<BrandAllAgent> BrandAllAgents { get; set; }

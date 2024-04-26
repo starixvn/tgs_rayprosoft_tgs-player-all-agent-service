@@ -11,4 +11,5 @@ public interface IBrandAllAgentClient
     Task<BrandAllAgent> GetBrandAllAgentAsync(GetBrandAllAgentRequest request);
     IAsyncEnumerable<GameTypeModel> GetGameTypesAsync(GetGameTypesRequest request);
     IAsyncEnumerable<ValidBetConditionModel> GetValidBetConditionsAsync(GetValidBetConditionsRequest request);
+    IAsyncEnumerable<ValidBetConditionModel> GetAllValidBetConditionsAsync(GetAllValidBetConditionsRequest request);
 }

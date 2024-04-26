@@ -1,10 +1,14 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using NUnit.Framework;
 using Tgs.Player.All.Agent.Client;
 using Tgs.Player.All.Agent.Client.Models;
+using Tgs.Player.All.Agent.Domain.Enums;
 using Tgs.Player.All.Agent.Domain.Interfaces;
 using Tgs.Player.All.Agent.Domain.Models;
+using Tgs.Player.All.Agent.Repository.Entities;
 using AllAgentGameType = Tgs.Player.All.Agent.Domain.Enums.AllAgentGameType;
 using GetBrandAllAgentRequest = Tgs.Player.All.Agent.Domain.Models.GetBrandAllAgentRequest;
 using SettlementIntervalType = Tgs.Player.All.Agent.Domain.Enums.SettlementIntervalType;
@@ -331,6 +335,44 @@ public class BrandAllAgentTests
             await sut.UpdateGameTypeSwitchAsync(request);
 
             _ = fakeMediator.Received(1).Send(Arg.Is<UpdateBrandAllAgentGameTypeSwitchRequest>(new UpdateBrandAllAgentGameTypeSwitchRequest(brandId, true, true, AllAgentGameType.CardGame)));
+        }
+    }
+
+    [Test]
+    public async Task Get_Brand_All_All_Agent_Valid_Bet_Conditions()
+    {
+        var brandId = Guid.NewGuid();
+
+        await using var web = new TestApplication();
+
+        var dbContext = web.Services.GetRequiredService<tgsContext>();
+
+        var condition = new BrandAllAgentGameTypeCondition
+        {
+            AllAgentGameType = (int)AllAgentGameType.CardGame,
+            AllAgentRebateType = (short)AllAgentRebateType.ValidBet,
+            BrandId = brandId,
+            Rank = 1,
+        };
+
+        _ = await dbContext.BrandAllAgentGameTypeConditions.AddAsync(condition);
+
+        _ = await dbContext.SaveChangesAsync();
+
+        var httpClient = web.CreateClient();
+        {
+            var sut = new BrandAllAgentClient(httpClient);
+
+            var request = new GetAllValidBetConditionsRequest(brandId);
+
+            var response = await sut.GetAllValidBetConditionsAsync(request).ToArrayAsync();
+
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response, Has.Length.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.Any(x => x is { Rank: 1, ActiveNumber: 0, NetProfit: 0, RebatePercentage: 0 }));
+            });
         }
     }
 }
