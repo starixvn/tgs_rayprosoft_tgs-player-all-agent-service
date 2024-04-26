@@ -40,4 +40,6 @@ public interface IBrandAllAgentRepository
 
     IAsyncEnumerable<ValidBetConditionViewModel> GetBrandAllAgentValidBetConditionsAsync(Guid brandId,
         AllAgentGameType allAgentGameType);
+
+    IAsyncEnumerable<ValidBetConditionViewModel> GetBrandAllAllAgentValidBetConditionsAsync(Guid brandId);
 }

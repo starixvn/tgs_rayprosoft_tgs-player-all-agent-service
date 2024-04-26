@@ -151,6 +151,23 @@ public class BrandAllAgentRepository : IBrandAllAgentRepository
                         x.AllAgentRebateType == (short)AllAgentRebateType.ValidBet)
             .Select(x => new ValidBetConditionViewModel
             {
+                AllAgentGameType = (AllAgentGameType)x.AllAgentGameType,
+                Rank = x.Rank,
+                ActiveNumber = x.ActiveNumber,
+                NetProfit = x.NetProfit,
+                RebatePercentage = x.RebatePercentage
+            })
+            .ToAsyncEnumerable();
+    }
+
+    public IAsyncEnumerable<ValidBetConditionViewModel> GetBrandAllAllAgentValidBetConditionsAsync(Guid brandId)
+    {
+        return _tgsContext.BrandAllAgentGameTypeConditions
+            .Where(x => x.BrandId == brandId &&
+                        x.AllAgentRebateType == (short)AllAgentRebateType.ValidBet)
+            .Select(x => new ValidBetConditionViewModel
+            {
+                AllAgentGameType = (AllAgentGameType)x.AllAgentGameType,
                 Rank = x.Rank,
                 ActiveNumber = x.ActiveNumber,
                 NetProfit = x.NetProfit,

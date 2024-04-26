@@ -2,6 +2,8 @@
 
 public class ValidBetConditionModel
 {
+    public AllAgentGameType AllAgentGameType { get; set; }
+
     public int ActiveNumber { get; set; }
 
     public decimal NetProfit { get; set; }

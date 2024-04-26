@@ -99,8 +99,7 @@ public class BrandAllAgentTests
         var fakeBrandAllAgentRepository = Substitute.For<IBrandAllAgentRepository>();
 
         var sut = new GetBrandAllAgentValidBetConditionsHandler(
-            fakeBrandAllAgentRepository,
-            NullLogger<GetBrandAllAgentValidBetConditionsHandler>.Instance);
+            fakeBrandAllAgentRepository);
 
         var brandId = Guid.NewGuid();
 

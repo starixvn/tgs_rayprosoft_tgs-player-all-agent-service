@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NUnit.Framework;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using Tgs.Player.All.Agent.Repository.Entities;
@@ -39,9 +42,14 @@ internal class TestApplication : WebApplicationFactory<service::Program>
                         exporterOptions.Endpoint = new Uri("http://otel.rpgp.cc:4317");
                     }))
             .AddFakeNatsMessageQueue()
-            .Replace(ServiceDescriptor.Singleton(sp =>
-            {
+        .Replace(ServiceDescriptor.Singleton(sp =>
+        {
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<tgsContext>();
+                _ = dbContextOptionsBuilder
+                    .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                    .ConfigureWarnings(x => x.Ignore(
+                        InMemoryEventId.TransactionIgnoredWarning));
+
 
                 return new tgsContext(dbContextOptionsBuilder.Options);
             })));
