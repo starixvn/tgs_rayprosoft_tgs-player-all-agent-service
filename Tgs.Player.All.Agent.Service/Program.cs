@@ -91,7 +91,7 @@ builder.Services.AddOpenTelemetry()
     .Configure<AspNetCoreInstrumentationOptions>(options => options.Filter =
         httpContext => !httpContext.Request.Path.HasValue ||
                        (!httpContext.Request.Path.StartsWithSegments("/swagger") &&
-                        !httpContext.Request.Path.StartsWithSegments("/healthz") &&
+                        !httpContext.Request.Path.StartsWithSegments("/health") &&
                         !httpContext.Request.Path.StartsWithSegments("/profiler/") &&
                         !new[] { "html", "ico", "png", "jpg" }.Any(
                             ext => httpContext.Request.Path.Value.EndsWith($".{ext}"))));
@@ -109,6 +109,6 @@ var app = builder.Build();
 app.UseSwaggerUI();
 app.MapControllers();
 app.MapSwagger();
-app.MapHealthChecks("/healthz");
+app.MapHealthChecks("/health");
 
 app.Run();
