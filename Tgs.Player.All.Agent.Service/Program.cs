@@ -14,6 +14,8 @@ builder.Configuration
     .AddJsonFile("/config/appsettings.json", true)
     .AddEnvironmentVariables();
 
+builder.WebHost.UseUrls($"http://0.0.0.0:{builder.Configuration["HostingPort"]}");
+
 builder.Host.ConfigureServices((context, services) => services
     .AddHostedService<PlayerAllAgentRebateBackground>()
     .AddSingleton<IPlayerAllAgentRebateTaskQueue, PlayerAllAgentRebateTaskQueue>()
