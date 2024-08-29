@@ -111,6 +111,7 @@ app.UseSwaggerUI();
 app.MapControllers();
 app.MapSwagger();
 app.MapHealthChecks("/health");
+app.MapHealthChecks("/");
 
 SentrySdk.CaptureMessage($"Started result Player-All-Agent-Service at {DateTime.Now.ToString()}");
 
