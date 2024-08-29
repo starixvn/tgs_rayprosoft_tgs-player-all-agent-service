@@ -54,19 +54,19 @@ builder.Services
     )
     .AddNatsGlobPatternExchange("*");
 
-builder.Logging
-    .AddOpenTelemetry(options =>
-    {
-        options.IncludeFormattedMessage = true;
-        options.ParseStateValues = true;
-        _ = options.AddFluentdForwardExporter(fluentOptions =>
-        {
-            var nodeIp = builder.Configuration.GetValue<string>("Otel:NodeIp");
-            fluentOptions.Host = nodeIp!;
-            fluentOptions.Tag = builder.Configuration.GetValue<string>("Otel:ServiceName")!;
-            fluentOptions.UseMessagePack();
-        });
-    });
+//builder.Logging
+//    .AddOpenTelemetry(options =>
+//    {
+//        options.IncludeFormattedMessage = true;
+//        options.ParseStateValues = true;
+//        _ = options.AddFluentdForwardExporter(fluentOptions =>
+//        {
+//            var nodeIp = builder.Configuration.GetValue<string>("Otel:NodeIp");
+//            fluentOptions.Host = nodeIp!;
+//            fluentOptions.Tag = builder.Configuration.GetValue<string>("Otel:ServiceName")!;
+//            fluentOptions.UseMessagePack();
+//        });
+//    });
 
 builder.Services
     .AddOptions<OtlpExporterOptions>()
