@@ -8,10 +8,6 @@ using Tgs.Player.All.Agent.Core.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration
-    .AddJsonFile("/config/appsettings.json", true)
-    .AddEnvironmentVariables();
-
 builder.Host.ConfigureServices((context, services) => services
     .AddHostedService<PlayerAllAgentRebateBackground>()
     .AddSingleton<IPlayerAllAgentRebateTaskQueue, PlayerAllAgentRebateTaskQueue>()
