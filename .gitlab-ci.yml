@@ -108,7 +108,7 @@ push-k8s-template:
       - artifacts/**/*
 
 deploy-dev:
-  extends: .deploy-template
+  extends: .deploy-k8s-template
   variables:
     kube_config: KubeConfig_Raypro_dev
     namespace: dev
@@ -119,12 +119,16 @@ deploy-dev:
     - push-docker-image
     - job: push-k8s-template
       artifacts: true
+  tags:
+    - dev
+    - kubernetes
+    - deploy
   only:
     - main
   when: on_success
 
 deploy-staging:
-  extends: .deploy-template
+  extends: .deploy-k8s-template
   variables:
     kube_config: KubeConfig_Raypro_staging
     namespace: staging
@@ -135,12 +139,16 @@ deploy-staging:
     - deploy-dev
     - job: push-k8s-template
       artifacts: true
+  tags:
+    - staging
+    - kubernetes
+    - deploy
   only:
     - main
   when: manual
 
 deploy-prod:
-  extends: .deploy-template
+  extends: .deploy-k8s-template
   variables:
     kube_config: KubeConfig_Raypro_prod
     namespace: prod
@@ -151,6 +159,10 @@ deploy-prod:
     - deploy-staging
     - job: push-k8s-template
       artifacts: true
+  tags:
+    - prod
+    - kubernetes
+    - deploy
   only:
     - main
   when: manual
