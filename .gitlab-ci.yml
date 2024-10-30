@@ -112,6 +112,7 @@ deploy-dev:
   variables:
     kube_config: KubeConfig_Raypro_dev
     namespace: dev
+    replica: 1
   environment:
     name: dev
   stage: deploy-dev
@@ -132,6 +133,7 @@ deploy-staging:
   variables:
     kube_config: KubeConfig_Raypro_staging
     namespace: staging
+    replica: 1
   environment:
     name: staging
   stage: deploy-staging
@@ -152,6 +154,7 @@ deploy-prod:
   variables:
     kube_config: KubeConfig_Raypro_prod
     namespace: prod
+    replica: 3
   environment:
     name: prod
   stage: deploy-prod

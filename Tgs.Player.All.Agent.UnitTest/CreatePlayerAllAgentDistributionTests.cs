@@ -78,7 +78,7 @@ public class CreatePlayerAllAgentDistributionTests
             .QueuePlayerRebateAsync(Arg.Any<PlayerAllAgentRebateQueueModel>());
     }
 
-    private Fixture CreateConditionFixture(Guid brandId)
+    private static Fixture CreateConditionFixture(Guid brandId)
     {
         var fixture = new Fixture();
         fixture.Customize<BrandAllAgentGameTypeConditionViewModel>(u => u
